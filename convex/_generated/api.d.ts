@@ -15,6 +15,7 @@ import type * as comments from "../comments.js";
 import type * as companies from "../companies.js";
 import type * as documents from "../documents.js";
 import type * as http from "../http.js";
+import type * as httpApi from "../httpApi.js";
 import type * as missions from "../missions.js";
 import type * as notifications from "../notifications.js";
 import type * as search from "../search.js";
@@ -36,6 +37,7 @@ declare const fullApi: ApiFromModules<{
   companies: typeof companies;
   documents: typeof documents;
   http: typeof http;
+  httpApi: typeof httpApi;
   missions: typeof missions;
   notifications: typeof notifications;
   search: typeof search;
