@@ -15,6 +15,7 @@ const NAV_ITEMS = [
   { href: "/missions", label: "Missions", icon: "🎯" },
   { href: "/documents", label: "Documents", icon: "📄" },
   { href: "/logs", label: "Activity Log", icon: "📡" },
+  { href: "/reminders", label: "Reminders", icon: "⏰" },
 ];
 
 interface SidebarProps {

@@ -265,6 +265,49 @@ export default defineSchema({
     .index("by_actionType", ["actionType"])
     .index("by_status", ["status"]),
 
+  reminders: defineTable({
+    title: v.string(),
+    description: v.optional(v.string()),
+    dueAt: v.number(),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("triggered"),
+      v.literal("snoozed"),
+      v.literal("dismissed"),
+      v.literal("completed")
+    ),
+    priority: v.union(
+      v.literal("critical"),
+      v.literal("high"),
+      v.literal("medium"),
+      v.literal("low")
+    ),
+    recurrence: v.optional(
+      v.union(
+        v.literal("none"),
+        v.literal("daily"),
+        v.literal("weekly"),
+        v.literal("monthly")
+      )
+    ),
+    companyId: v.optional(v.id("companies")),
+    agentId: v.optional(v.id("agents")),
+    taskId: v.optional(v.id("tasks")),
+    createdBy: v.string(),
+    tags: v.optional(v.array(v.string())),
+    snoozedUntil: v.optional(v.number()),
+    triggeredAt: v.optional(v.number()),
+    completedAt: v.optional(v.number()),
+    metadata: v.optional(v.any()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_status", ["status"])
+    .index("by_dueAt", ["dueAt"])
+    .index("by_agent", ["agentId"])
+    .index("by_company", ["companyId"])
+    .index("by_createdBy", ["createdBy"]),
+
   missions: defineTable({
     title: v.string(),
     description: v.string(),

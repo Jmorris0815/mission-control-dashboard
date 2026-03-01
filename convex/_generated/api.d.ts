@@ -20,6 +20,7 @@ import type * as http from "../http.js";
 import type * as httpApi from "../httpApi.js";
 import type * as missions from "../missions.js";
 import type * as notifications from "../notifications.js";
+import type * as reminders from "../reminders.js";
 import type * as search from "../search.js";
 import type * as seed from "../seed.js";
 import type * as tasks from "../tasks.js";
@@ -44,6 +45,7 @@ declare const fullApi: ApiFromModules<{
   httpApi: typeof httpApi;
   missions: typeof missions;
   notifications: typeof notifications;
+  reminders: typeof reminders;
   search: typeof search;
   seed: typeof seed;
   tasks: typeof tasks;
