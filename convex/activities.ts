@@ -73,3 +73,10 @@ export const create = mutation({
     });
   },
 });
+
+export const remove = mutation({
+  args: { id: v.id("activities") },
+  handler: async (ctx, { id }) => {
+    await ctx.db.delete(id);
+  },
+});

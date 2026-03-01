@@ -14,6 +14,7 @@ import type * as agents from "../agents.js";
 import type * as auth from "../auth.js";
 import type * as comments from "../comments.js";
 import type * as companies from "../companies.js";
+import type * as dispatch from "../dispatch.js";
 import type * as documents from "../documents.js";
 import type * as http from "../http.js";
 import type * as httpApi from "../httpApi.js";
@@ -37,6 +38,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   comments: typeof comments;
   companies: typeof companies;
+  dispatch: typeof dispatch;
   documents: typeof documents;
   http: typeof http;
   httpApi: typeof httpApi;
