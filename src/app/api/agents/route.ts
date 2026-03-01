@@ -61,6 +61,15 @@ export async function GET(request: NextRequest) {
 
   const color = searchParams.get("color") || "#3b82f6";
 
+  // Role title — the human-readable title (e.g. "Marketing", "AI Chief of Staff")
+  const roleTitle = searchParams.get("roleTitle") || searchParams.get("title") || undefined;
+
+  // Current task title
+  const currentTaskTitle = searchParams.get("currentTask") || undefined;
+
+  // Last action
+  const lastAction = searchParams.get("lastAction") || undefined;
+
   // Specialties: comma-separated string → array
   const specialtiesRaw = searchParams.get("specialties") || "";
   const capabilities = specialtiesRaw
@@ -103,11 +112,14 @@ export async function GET(request: NextRequest) {
     const agentId = await client.mutation(api.agents.create, {
       name,
       role,
+      roleTitle,
       description,
-      avatar: color, // store the hex color in the avatar field
+      avatar: color,
       status,
       companyId: companyId as any,
       capabilities,
+      currentTaskTitle,
+      lastAction,
     });
 
     return jsonResponse({
@@ -118,6 +130,7 @@ export async function GET(request: NextRequest) {
         id: agentId,
         name,
         role,
+        roleTitle,
         status,
         description,
         color,

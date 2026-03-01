@@ -58,7 +58,16 @@ export async function GET(request: NextRequest) {
       ? Number(tasksCompletedRaw)
       : undefined;
 
+  const tasksCompletedTodayRaw = searchParams.get("tasksCompletedToday");
+  const tasksCompletedToday =
+    tasksCompletedTodayRaw !== null && !isNaN(Number(tasksCompletedTodayRaw))
+      ? Number(tasksCompletedTodayRaw)
+      : undefined;
+
   const description = searchParams.get("description") ?? undefined;
+  const roleTitle = searchParams.get("roleTitle") ?? searchParams.get("title") ?? undefined;
+  const currentTaskTitle = searchParams.get("currentTask") ?? undefined;
+  const lastAction = searchParams.get("lastAction") ?? undefined;
 
   const specialtiesRaw = searchParams.get("specialties");
   const capabilities = specialtiesRaw
@@ -69,14 +78,18 @@ export async function GET(request: NextRequest) {
   if (
     status === undefined &&
     totalTasksCompleted === undefined &&
+    tasksCompletedToday === undefined &&
     description === undefined &&
+    roleTitle === undefined &&
+    currentTaskTitle === undefined &&
+    lastAction === undefined &&
     capabilities === undefined
   ) {
     return jsonResponse(
       {
         success: false,
         error:
-          "Provide at least one field to update: status, tasksCompleted, description, specialties",
+          "Provide at least one field to update: status, tasksCompleted, tasksCompletedToday, description, roleTitle, currentTask, lastAction, specialties",
       },
       400
     );
@@ -90,14 +103,22 @@ export async function GET(request: NextRequest) {
       name,
       ...(status !== undefined && { status }),
       ...(totalTasksCompleted !== undefined && { totalTasksCompleted }),
+      ...(tasksCompletedToday !== undefined && { tasksCompletedToday }),
       ...(description !== undefined && { description }),
+      ...(roleTitle !== undefined && { roleTitle }),
+      ...(currentTaskTitle !== undefined && { currentTaskTitle }),
+      ...(lastAction !== undefined && { lastAction }),
       ...(capabilities !== undefined && { capabilities }),
     });
 
     const changes: Record<string, unknown> = {};
     if (status !== undefined) changes.status = status;
     if (totalTasksCompleted !== undefined) changes.totalTasksCompleted = totalTasksCompleted;
+    if (tasksCompletedToday !== undefined) changes.tasksCompletedToday = tasksCompletedToday;
     if (description !== undefined) changes.description = description;
+    if (roleTitle !== undefined) changes.roleTitle = roleTitle;
+    if (currentTaskTitle !== undefined) changes.currentTaskTitle = currentTaskTitle;
+    if (lastAction !== undefined) changes.lastAction = lastAction;
     if (capabilities !== undefined) changes.capabilities = capabilities;
 
     return jsonResponse({
@@ -109,7 +130,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Unknown error";
-    const status = message.includes("not found") ? 404 : 500;
-    return jsonResponse({ success: false, error: message }, status);
+    const httpStatus = message.includes("not found") ? 404 : 500;
+    return jsonResponse({ success: false, error: message }, httpStatus);
   }
 }

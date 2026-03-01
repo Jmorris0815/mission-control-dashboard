@@ -60,6 +60,7 @@ export default defineSchema({
   agents: defineTable({
     name: v.string(),
     role: v.string(),
+    roleTitle: v.optional(v.string()),
     description: v.string(),
     avatar: v.optional(v.string()),
     status: v.union(
@@ -72,8 +73,12 @@ export default defineSchema({
     companyId: v.optional(v.id("companies")),
     capabilities: v.array(v.string()),
     currentTaskId: v.optional(v.id("tasks")),
+    currentTaskTitle: v.optional(v.string()),
     personality: v.optional(v.string()),
     lastHeartbeat: v.optional(v.number()),
+    lastAction: v.optional(v.string()),
+    lastStatusChange: v.optional(v.number()),
+    tasksCompletedToday: v.optional(v.number()),
     totalTasksCompleted: v.number(),
     totalTokensUsed: v.optional(v.number()),
     openclawSessionId: v.optional(v.string()),

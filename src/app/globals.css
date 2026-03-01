@@ -46,6 +46,8 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+/* ── Agent Status Animations ──────────────────────────────────────────────── */
+
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
@@ -53,4 +55,85 @@ body {
 
 .animate-pulse-dot {
   animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes glow-green {
+  0%, 100% {
+    box-shadow: 0 0 4px 1px rgba(34, 197, 94, 0.6),
+                0 0 12px 3px rgba(34, 197, 94, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 6px 2px rgba(34, 197, 94, 0.8),
+                0 0 18px 5px rgba(34, 197, 94, 0.35);
+  }
+}
+
+@keyframes glow-amber {
+  0%, 100% {
+    box-shadow: 0 0 4px 1px rgba(245, 158, 11, 0.6),
+                0 0 12px 3px rgba(245, 158, 11, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 6px 2px rgba(245, 158, 11, 0.8),
+                0 0 18px 5px rgba(245, 158, 11, 0.35);
+  }
+}
+
+@keyframes glow-red {
+  0%, 100% {
+    box-shadow: 0 0 4px 1px rgba(239, 68, 68, 0.6),
+                0 0 12px 3px rgba(239, 68, 68, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 5px 2px rgba(239, 68, 68, 0.9),
+                0 0 16px 5px rgba(239, 68, 68, 0.4);
+  }
+}
+
+.status-glow-online {
+  background-color: #22c55e;
+  animation: glow-green 2s ease-in-out infinite;
+}
+
+.status-glow-busy {
+  background-color: #f59e0b;
+  animation: glow-amber 2.5s ease-in-out infinite;
+}
+
+.status-glow-idle {
+  background-color: #6b7280;
+  box-shadow: none;
+}
+
+.status-glow-offline {
+  background-color: #374151;
+  box-shadow: none;
+}
+
+.status-glow-error {
+  background-color: #ef4444;
+  animation: glow-red 1s ease-in-out infinite;
+}
+
+/* ── Agent Card Border Glow ───────────────────────────────────────────────── */
+
+.agent-card-online {
+  border-color: rgba(34, 197, 94, 0.25);
+}
+.agent-card-online:hover {
+  border-color: rgba(34, 197, 94, 0.45);
+}
+
+.agent-card-busy {
+  border-color: rgba(245, 158, 11, 0.25);
+}
+.agent-card-busy:hover {
+  border-color: rgba(245, 158, 11, 0.45);
+}
+
+.agent-card-error {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+.agent-card-error:hover {
+  border-color: rgba(239, 68, 68, 0.5);
 }
