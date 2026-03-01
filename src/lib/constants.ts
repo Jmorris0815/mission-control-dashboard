@@ -21,7 +21,7 @@ export const PRIORITY_CONFIG = {
 export const AGENT_STATUS_CONFIG = {
   online: { label: "Online", color: "bg-green-500", pulse: true },
   busy: { label: "Busy", color: "bg-yellow-500", pulse: false },
-  idle: { label: "Idle", color: "bg-gray-400", pulse: false },
+  idle: { label: "Standby", color: "bg-gray-400", pulse: false },
   offline: { label: "Offline", color: "bg-gray-600", pulse: false },
   error: { label: "Error", color: "bg-red-500", pulse: true },
 } as const;
