@@ -244,6 +244,27 @@ export default defineSchema({
     .index("by_user", ["userId"])
     .index("by_user_read", ["userId", "read"]),
 
+  activityLogs: defineTable({
+    timestamp: v.number(),
+    agentName: v.string(),
+    actionType: v.string(),
+    description: v.string(),
+    status: v.union(
+      v.literal("success"),
+      v.literal("fail"),
+      v.literal("pending"),
+      v.literal("info")
+    ),
+    metadata: v.optional(v.any()),
+    company: v.optional(v.string()),
+    duration: v.optional(v.number()),
+    sessionId: v.optional(v.string()),
+  })
+    .index("by_timestamp", ["timestamp"])
+    .index("by_agent", ["agentName"])
+    .index("by_actionType", ["actionType"])
+    .index("by_status", ["status"]),
+
   missions: defineTable({
     title: v.string(),
     description: v.string(),

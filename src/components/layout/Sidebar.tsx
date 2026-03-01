@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { href: "/activity", label: "Activity Feed", icon: "⚡" },
   { href: "/missions", label: "Missions", icon: "🎯" },
   { href: "/documents", label: "Documents", icon: "📄" },
+  { href: "/logs", label: "Activity Log", icon: "📡" },
 ];
 
 interface SidebarProps {

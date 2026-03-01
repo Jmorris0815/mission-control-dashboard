@@ -9,6 +9,7 @@
  */
 
 import type * as activities from "../activities.js";
+import type * as activityLogs from "../activityLogs.js";
 import type * as agents from "../agents.js";
 import type * as auth from "../auth.js";
 import type * as comments from "../comments.js";
@@ -31,6 +32,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   activities: typeof activities;
+  activityLogs: typeof activityLogs;
   agents: typeof agents;
   auth: typeof auth;
   comments: typeof comments;
