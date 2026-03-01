@@ -1,6 +1,8 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
+// ── Queries ───────────────────────────────────────────────────────────────────
+
 export const list = query({
   args: {},
   handler: async (ctx) => {
@@ -24,6 +26,8 @@ export const getByCompany = query({
       .collect();
   },
 });
+
+// ── Mutations ─────────────────────────────────────────────────────────────────
 
 export const create = mutation({
   args: {
@@ -81,6 +85,7 @@ export const update = mutation({
     capabilities: v.optional(v.array(v.string())),
     personality: v.optional(v.string()),
     currentTaskId: v.optional(v.id("tasks")),
+    totalTasksCompleted: v.optional(v.number()),
   },
   handler: async (ctx, { id, ...updates }) => {
     const agent = await ctx.db.get(id);
@@ -107,6 +112,91 @@ export const update = mutation({
         createdAt: Date.now(),
       });
     }
+  },
+});
+
+/** Find an agent by exact name (case-insensitive) and update their fields. */
+export const updateByName = mutation({
+  args: {
+    name: v.string(),
+    status: v.optional(
+      v.union(
+        v.literal("online"),
+        v.literal("busy"),
+        v.literal("idle"),
+        v.literal("offline"),
+        v.literal("error")
+      )
+    ),
+    description: v.optional(v.string()),
+    capabilities: v.optional(v.array(v.string())),
+    totalTasksCompleted: v.optional(v.number()),
+    currentTaskId: v.optional(v.id("tasks")),
+  },
+  handler: async (ctx, { name, ...updates }) => {
+    const all = await ctx.db.query("agents").collect();
+    const agent = all.find(
+      (a) => a.name.toLowerCase() === name.toLowerCase()
+    );
+    if (!agent) throw new Error(`Agent "${name}" not found`);
+
+    const filtered = Object.fromEntries(
+      Object.entries(updates).filter(([, v]) => v !== undefined)
+    );
+    await ctx.db.patch(agent._id, filtered);
+
+    if (updates.status && updates.status !== agent.status) {
+      const type =
+        updates.status === "online"
+          ? ("agent_online" as const)
+          : updates.status === "offline"
+            ? ("agent_offline" as const)
+            : updates.status === "error"
+              ? ("agent_error" as const)
+              : ("system" as const);
+      await ctx.db.insert("activities", {
+        type,
+        agentId: agent._id,
+        companyId: agent.companyId,
+        message: `${agent.name} is now ${updates.status}`,
+        createdAt: Date.now(),
+      });
+    }
+
+    return agent._id;
+  },
+});
+
+/** Delete an agent by exact name (case-insensitive). */
+export const removeByName = mutation({
+  args: { name: v.string() },
+  handler: async (ctx, { name }) => {
+    const all = await ctx.db.query("agents").collect();
+    const agent = all.find(
+      (a) => a.name.toLowerCase() === name.toLowerCase()
+    );
+    if (!agent) throw new Error(`Agent "${name}" not found`);
+    await ctx.db.insert("activities", {
+      type: "agent_offline",
+      agentId: agent._id,
+      companyId: agent.companyId,
+      message: `Agent "${agent.name}" has been removed`,
+      createdAt: Date.now(),
+    });
+    await ctx.db.delete(agent._id);
+    return agent._id;
+  },
+});
+
+/** Remove ALL agents (used for fresh-start migrations). */
+export const clearAll = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const all = await ctx.db.query("agents").collect();
+    for (const agent of all) {
+      await ctx.db.delete(agent._id);
+    }
+    return { removed: all.length };
   },
 });
 
